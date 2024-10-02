@@ -1,0 +1,418 @@
+openapi: 3.0.0
+info:
+  title: Library Management System API
+  version: 1.0.0
+  description: API for managing a library system with users, ebooks, sections, requests, and feedback.
+
+servers:
+  - url: http://localhost:5000/api
+
+paths:
+  /login:
+    post:
+      summary: User login
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                username:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+        '401':
+          description: Invalid credentials
+
+  /register:
+    post:
+      summary: User registration
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                username:
+                  type: string
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Email already registered or username taken
+
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of users
+
+  /user/profile:
+    get:
+      summary: Get user profile
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User profile
+        '404':
+          description: User not found
+    put:
+      summary: Update user profile
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Profile updated successfully
+        '400':
+          description: Username or email already taken
+
+  /user/stats:
+    get:
+      summary: Get user statistics
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User statistics
+
+  /section:
+    get:
+      summary: Get all sections
+      tags:
+        - Sections
+      responses:
+        '200':
+          description: List of sections
+    post:
+      summary: Create a new section
+      tags:
+        - Sections
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                section_name:
+                  type: string
+                section_description:
+                  type: string
+      responses:
+        '200':
+          description: Section created successfully
+
+  /section/{section_id}:
+    put:
+      summary: Update a section
+      tags:
+        - Sections
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: section_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                section_name:
+                  type: string
+                section_description:
+                  type: string
+      responses:
+        '200':
+          description: Section updated successfully
+    delete:
+      summary: Delete a section
+      tags:
+        - Sections
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: section_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Section deleted successfully
+
+  /ebook:
+    get:
+      summary: Get all ebooks
+      tags:
+        - Ebooks
+      responses:
+        '200':
+          description: List of ebooks
+    post:
+      summary: Create a new ebook
+      tags:
+        - Ebooks
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                author:
+                  type: string
+                section_id:
+                  type: integer
+      responses:
+        '200':
+          description: Ebook created successfully
+
+  /ebook/{ebook_id}:
+    put:
+      summary: Update an ebook
+      tags:
+        - Ebooks
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: ebook_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                author:
+                  type: string
+                section_id:
+                  type: integer
+      responses:
+        '200':
+          description: Ebook updated successfully
+    delete:
+      summary: Delete an ebook
+      tags:
+        - Ebooks
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: ebook_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ebook deleted successfully
+
+  /request:
+    get:
+      summary: Get all requests
+      tags:
+        - Requests
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of requests
+    post:
+      summary: Create a new request
+      tags:
+        - Requests
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ebook_id:
+                  type: integer
+      responses:
+        '200':
+          description: Request submitted successfully
+
+  /request/{request_id}:
+    put:
+      summary: Update a request status
+      tags:
+        - Requests
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: request_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [granted, revoked]
+      responses:
+        '200':
+          description: Request status updated successfully
+
+  /return/{request_id}:
+    post:
+      summary: Return an ebook
+      tags:
+        - Returns
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: request_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ebook returned successfully
+
+  /auto-return:
+    post:
+      summary: Automatically return overdue ebooks
+      tags:
+        - Returns
+      responses:
+        '200':
+          description: Overdue books returned automatically
+
+  /feedback:
+    get:
+      summary: Get all feedback
+      tags:
+        - Feedback
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of feedback
+    post:
+      summary: Submit feedback for an ebook
+      tags:
+        - Feedback
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ebook_id:
+                  type: integer
+                rating:
+                  type: integer
+                comment:
+                  type: string
+      responses:
+        '200':
+          description: Feedback submitted successfully
+
+  /feedback/{feedback_id}:
+    delete:
+      summary: Delete feedback
+      tags:
+        - Feedback
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: feedback_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Feedback deleted successfully
+
+  /librarian/dashboard:
+    get:
+      summary: Get librarian dashboard statistics
+      tags:
+        - Librarian
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Dashboard statistics
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
