@@ -1,10 +1,10 @@
-##Library Management System v2 MAD 2 Project
+# Library Management System v2 MAD 2 Project
 
-**Description:**
+## Description
 
 This multi-user web application facilitates the management and access of e-books in an online library setting. It empowers librarians to organize sections, add and edit e-books, control user access, and monitor library activity. General users can search and browse e-books, request access, view issued books, and provide feedback.
 
-**Key Features:**
+## Key Features
 
 * **Role-Based Access Control (RBAC):** Ensures secure access with separate functionalities for librarians and general users.
 * **Librarian Dashboard:** Provides an overview of key library statistics, including active users, grant requests, e-books issued, and revoked.
@@ -17,7 +17,7 @@ This multi-user web application facilitates the management and access of e-books
 * **Daily Reminders:** Users receive daily notifications (via Google Chat Webhooks, SMS, or email) reminding them to access or return e-books approaching their due date.
 * **Monthly Activity Reports:** Librarians receive monthly reports via email, summarizing key library activities like sections and e-books issued, return dates, and e-book ratings.
 
-**Technologies:**
+## Technologies
 
 * **Frontend:** Vue.js
 * **Backend:** Flask
